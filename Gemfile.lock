@@ -84,6 +84,8 @@ GEM
     diff-lcs (1.5.1)
     e2mmap (0.1.0)
     erubi (1.12.0)
+    faker (2.21.0)
+      i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     htmlbeautifier (1.4.3)
@@ -254,6 +256,7 @@ DEPENDENCIES
   bcrypt (= 3.1.18)
   bootsnap
   debug (= 1.9.2)
+  faker (= 2.21.0)
   htmlbeautifier (= 1.4.3)
   jwt (= 2.8.1)
   puma (~> 5.0)

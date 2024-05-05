@@ -16,6 +16,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'faker', '2.21.0'
   gem 'htmlbeautifier', '1.4.3'
   gem 'solargraph', '0.50.0'
   gem 'web-console', '4.2.1'
