@@ -1,5 +1,5 @@
 class Api::UsersController < ApplicationController
-  before_action :authenticate, only: %i[update]
+  before_action :authenticate, only: %i[update show]
 
   def create
     @user = User.new(user_params)
@@ -7,6 +7,14 @@ class Api::UsersController < ApplicationController
       render_user(@user, nil, :created)
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def show
+    if @current_user
+      render_user(@current_user, nil, :ok)
+    else
+      render json: { errors: { body: @current_user.errors } }, status: :unprocessable_entity
     end
   end
 
