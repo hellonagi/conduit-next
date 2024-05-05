@@ -12,7 +12,7 @@ class Api::UsersController < ApplicationController
 
   def show
     if @current_user
-      render_user(@current_user, nil, :ok)
+      render_user(@current_user, token, :ok)
     else
       render json: { errors: { body: @current_user.errors } }, status: :unprocessable_entity
     end
@@ -20,7 +20,7 @@ class Api::UsersController < ApplicationController
 
   def update
     if @current_user.update(user_update_params)
-      render_user(@current_user, nil, :ok)
+      render_user(@current_user, token, :ok)
     else
       render json: { errors: { body: @current_user.errors } }, status: :unprocessable_entity
     end

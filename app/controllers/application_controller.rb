@@ -5,10 +5,6 @@ class ApplicationController < ActionController::API
     JWT.encode(payload, secret_key, 'HS256')
   end
 
-  def render_unauthorized
-    render json: { errors: 'Unauthorized' }, status: :unauthorized
-  end
-
   def authenticate
     @current_user ||= User.find(decoded_auth_token[0]['user_id']) if decoded_auth_token
   rescue ActiveRecord::RecordNotFound
@@ -16,8 +12,11 @@ class ApplicationController < ActionController::API
   end
 
   def decoded_auth_token
-    token = request.headers['Authorization'].split(' ').last
     secret_key = Rails.application.credentials.secret_key_base
     @decoded_auth_token ||= JWT.decode(token, secret_key)
+  end
+
+  def token
+    request.headers['Authorization'].split(' ').last
   end
 end
