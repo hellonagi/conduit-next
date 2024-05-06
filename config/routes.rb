@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     get '/articles/:slug/comments', to: 'comments#index'
     post '/articles/:slug/comments', to: 'comments#create'
     delete '/articles/:slug/comments/:id', to: 'comments#destroy'
+    post 'articles/:slug/favorite', to: 'articles#favorite'
+    delete 'articles/:slug/favorite', to: 'articles#unfavorite'
     get '/tags', to: 'articles#tags'
     post '/users/login', to: 'authentication#login'
   end

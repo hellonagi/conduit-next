@@ -1,9 +1,9 @@
 class Api::ArticlesController < ApplicationController
-  before_action :authenticate, only: %i[create update destroy]
+  before_action :authenticate, only: %i[create update destroy favorite unfavorite]
 
   def index
     articles = filter_articles
-    articles = articles.map { |article| build_article_response(article) }
+    articles = articles.map { |article| build_article_response(article, @current_user) }
     articles = {
       articles:,
       articlesCount: articles.length
@@ -13,21 +13,21 @@ class Api::ArticlesController < ApplicationController
 
   def show
     article = Article.find_by(slug: params[:slug])
-    render json: { article: build_article_response(article) }, status: :ok
+    render json: { article: build_article_response(article, @current_user) }, status: :ok
   end
 
   def create
-    @article = @current_user.articles.build(title: article_params[:title], description: article_params[:description],
-                                            body: article_params[:body])
-    if @article.save
+    article = @current_user.articles.build(title: article_params[:title], description: article_params[:description],
+                                           body: article_params[:body])
+    if article.save
       tag_list = article_params[:tagList]
       if tag_list.present?
         tags = tag_list.sort.map(&:strip).uniq
-        create_or_update_article_tags(@article, tags)
+        create_or_update_article_tags(article, tags)
       end
-      render json: { article: build_article_response(@article) }, status: :created
+      render json: { article: build_article_response(article, @current_user) }, status: :created
     else
-      render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,7 @@ class Api::ArticlesController < ApplicationController
     article = @current_user.articles.find_by(slug: params[:slug])
 
     if article.update(article_update_params)
-      render json: { article: build_article_response(article) }, status: :created
+      render json: { article: build_article_response(article, @current_user) }, status: :created
     else
       render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
     end
@@ -48,6 +48,22 @@ class Api::ArticlesController < ApplicationController
     else
       render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def favorite
+    article = Article.find_by(slug: params[:slug])
+    @current_user.add_favorite(article)
+    render json: { article: build_article_response(article, @current_user) }, status: :ok
+  rescue StandardError
+    render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def unfavorite
+    article = Article.find_by(slug: params[:slug])
+    @current_user.remove_favorite(article)
+    render json: { article: build_article_response(article, @current_user) }, status: :ok
+  rescue StandardError
+    render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
   end
 
   def tags
@@ -65,7 +81,7 @@ class Api::ArticlesController < ApplicationController
     params.require(:article).permit(:title, :description, :body)
   end
 
-  def build_article_response(article)
+  def build_article_response(article, user = nil)
     {
       title: article.title,
       slug: article.slug,
@@ -74,6 +90,8 @@ class Api::ArticlesController < ApplicationController
       tagList: article.tags.map(&:name),
       createdAt: article.created_at,
       updatedAt: article.updated_at,
+      favorited: user&.favorite?(article) || false,
+      favoritesCount: article.users_favorites.count,
       author: {
         username: article.user.username,
         bio: article.user.bio,
