@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     post '/users', to: 'users#create'
     put '/user', to: 'users#update'
     get '/profiles/:username', to: 'profiles#show'
+    post '/profiles/:username/follow', to: 'profiles#follow'
+    delete '/profiles/:username/follow', to: 'profiles#unfollow'
     get '/articles', to: 'articles#index'
     post '/articles', to: 'articles#create'
     get '/articles/:slug', to: 'articles#show'
