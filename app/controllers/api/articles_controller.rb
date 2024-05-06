@@ -1,5 +1,5 @@
 class Api::ArticlesController < ApplicationController
-  before_action :authenticate, only: %i[create update]
+  before_action :authenticate, only: %i[create update destroy]
 
   def index
     articles = filter_articles
@@ -36,6 +36,15 @@ class Api::ArticlesController < ApplicationController
 
     if article.update(article_update_params)
       render json: { article: build_article_response(article) }, status: :created
+    else
+      render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    article = @current_user.articles.find_by(slug: params[:slug])
+    if article.destroy
+      head :no_content
     else
       render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
     end

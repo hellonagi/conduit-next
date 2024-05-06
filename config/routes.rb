@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get '/articles', to: 'articles#index'
     get '/articles/:slug', to: 'articles#show'
     put '/articles/:slug', to: 'articles#update'
+    delete '/articles/:slug', to: 'articles#destroy'
     post '/articles', to: 'articles#create'
     post '/users/login', to: 'authentication#login'
   end
