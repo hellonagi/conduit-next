@@ -4,10 +4,11 @@ Rails.application.routes.draw do
     post '/users', to: 'users#create'
     put '/user', to: 'users#update'
     get '/articles', to: 'articles#index'
+    post '/articles', to: 'articles#create'
     get '/articles/:slug', to: 'articles#show'
     put '/articles/:slug', to: 'articles#update'
     delete '/articles/:slug', to: 'articles#destroy'
-    post '/articles', to: 'articles#create'
+    post '/articles/:slug/comments', to: 'comments#create'
     post '/users/login', to: 'authentication#login'
   end
 end
