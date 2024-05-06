@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     get '/user', to: 'users#show'
     post '/users', to: 'users#create'
     put '/user', to: 'users#update'
+    get '/profiles/:username', to: 'profiles#show'
     get '/articles', to: 'articles#index'
     post '/articles', to: 'articles#create'
     get '/articles/:slug', to: 'articles#show'
