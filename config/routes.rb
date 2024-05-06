@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get '/articles/:slug', to: 'articles#show'
     put '/articles/:slug', to: 'articles#update'
     delete '/articles/:slug', to: 'articles#destroy'
+    get '/articles/:slug/comments', to: 'comments#index'
     post '/articles/:slug/comments', to: 'comments#create'
     post '/users/login', to: 'authentication#login'
   end

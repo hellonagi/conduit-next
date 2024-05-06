@@ -1,6 +1,13 @@
 class Api::CommentsController < ApplicationController
   before_action :authenticate, only: %i[create]
 
+  def index
+    article = Article.find_by(slug: params[:slug])
+    comments = article.comments
+    comments = comments.map { |comment| build_comment_response(comment) }
+    render json: { comments: }, status: :ok
+  end
+
   def create
     comment = @current_user.comments.build(comment_params)
     article = Article.find_by(slug: params[:slug])
