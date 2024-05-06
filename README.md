@@ -2,7 +2,7 @@
 
 [RealWorld の バックエンドの API](https://realworld-docs.netlify.app/docs/specs/backend-specs/introduction) の仕様を満たす Rails API
 
-2-4まで実装済
+2-5 まで実装済
 
 ## 実装したエンドポイント
 
@@ -16,6 +16,7 @@
 | Follow user                  | `POST /api/profiles/:username/follow`     |
 | Unfollow user                | `DELETE /api/profiles/:username/follow`   |
 | List Articles                | `GET /api/articles`                       |
+| Feed Articles                | `GET /api/articles/feed`                  |
 | Get Article                  | `GET /api/articles/:slug`                 |
 | Create Article               | `POST /api/articles`                      |
 | Update Article               | `PUT /api/articles/:slug`                 |
@@ -23,9 +24,11 @@
 | Add Comments to an Article   | `POST /api/articles/:slug/comments`       |
 | Get Comments from an Article | `GET /api/articles/:slug/comments`        |
 | Delete Comment               | `DELETE /api/articles/:slug/comments/:id` |
+| Favorite Article             | `POST /api/articles/:slug/favorite`       |
+| Unfavorite Article           | `DELETE /api/articles/:slug/favorite`     |
 | Get Tags                     | `GET /api/tags`                           |
 
-## APIテストの実行方法
+## API テストの実行方法
 
 ```bash
 rails server # Railsサーバー起動
