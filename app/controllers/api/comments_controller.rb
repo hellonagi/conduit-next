@@ -1,5 +1,5 @@
 class Api::CommentsController < ApplicationController
-  before_action :authenticate, only: %i[create]
+  before_action :authenticate, only: %i[create destroy]
 
   def index
     article = Article.find_by(slug: params[:slug])
@@ -17,6 +17,17 @@ class Api::CommentsController < ApplicationController
       render json: { comment: build_comment_response(comment) }, status: :created
     else
       render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    article = Article.find_by(slug: params[:slug])
+    comments = article.comments
+    delete_comment = comments.find_by(id: params[:id])
+    if delete_comment.destroy
+      head :no_content
+    else
+      render json: { errors: delete_comment.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

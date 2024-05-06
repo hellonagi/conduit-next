@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     delete '/articles/:slug', to: 'articles#destroy'
     get '/articles/:slug/comments', to: 'comments#index'
     post '/articles/:slug/comments', to: 'comments#create'
+    delete '/articles/:slug/comments/:id', to: 'comments#destroy'
     post '/users/login', to: 'authentication#login'
   end
 end
