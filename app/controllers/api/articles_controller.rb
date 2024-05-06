@@ -50,6 +50,11 @@ class Api::ArticlesController < ApplicationController
     end
   end
 
+  def tags
+    tags = Tag.all
+    render json: { tags: tags.map(&:name) }, status: :ok
+  end
+
   private
 
   def article_params
