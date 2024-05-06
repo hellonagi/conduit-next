@@ -58,4 +58,9 @@ class User < ApplicationRecord
   def favorite?(article)
     favorite_articles.include?(article)
   end
+
+  # フォローしているユーザーの記事を取得
+  def following_articles
+    Article.where(user: following)
+  end
 end

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     delete '/profiles/:username/follow', to: 'profiles#unfollow'
     get '/articles', to: 'articles#index'
     post '/articles', to: 'articles#create'
+    get 'articles/feed', to: 'articles#feed'
     get '/articles/:slug', to: 'articles#show'
     put '/articles/:slug', to: 'articles#update'
     delete '/articles/:slug', to: 'articles#destroy'

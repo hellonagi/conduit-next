@@ -1,5 +1,5 @@
 class Api::ArticlesController < ApplicationController
-  before_action :authenticate, only: %i[create update destroy favorite unfavorite]
+  before_action :authenticate, only: %i[create update destroy favorite unfavorite feed]
 
   def index
     articles = filter_articles
@@ -64,6 +64,18 @@ class Api::ArticlesController < ApplicationController
     render json: { article: build_article_response(article, @current_user) }, status: :ok
   rescue StandardError
     render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def feed
+    articles = @current_user.following_articles
+    articles = articles.map { |article| build_article_response(article, @current_user) }
+    articles = {
+      articles:,
+      articlesCount: articles.length
+    }
+    render json: articles, status: :ok
+  rescue StandardError
+    render json: { errors: articles.errors.full_messages }, status: :unprocessable_entity
   end
 
   def tags
