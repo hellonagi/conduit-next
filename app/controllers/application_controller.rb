@@ -17,6 +17,7 @@ class ApplicationController < ActionController::API
   end
 
   def token
-    request.headers['Authorization'].split(' ').last
+    authorization_header = request.headers['Authorization']
+    authorization_header.split(' ').last if authorization_header
   end
 end

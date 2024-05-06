@@ -1,5 +1,5 @@
 class Api::ArticlesController < ApplicationController
-  before_action :authenticate, only: %i[create]
+  before_action :authenticate, only: %i[create update]
 
   def index
     articles = filter_articles
@@ -31,10 +31,24 @@ class Api::ArticlesController < ApplicationController
     end
   end
 
+  def update
+    article = @current_user.articles.find_by(slug: params[:slug])
+
+    if article.update(article_update_params)
+      render json: { article: build_article_response(article) }, status: :created
+    else
+      render json: { errors: article.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def article_params
     params.require(:article).permit(:title, :description, :body, tagList: [])
+  end
+
+  def article_update_params
+    params.require(:article).permit(:title, :description, :body)
   end
 
   def build_article_response(article)
