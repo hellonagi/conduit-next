@@ -11,6 +11,11 @@ class Api::ArticlesController < ApplicationController
     render json: articles, status: :ok
   end
 
+  def show
+    article = Article.find_by(slug: params[:slug])
+    render json: { article: build_article_response(article) }, status: :ok
+  end
+
   def create
     @article = @current_user.articles.build(title: article_params[:title], description: article_params[:description],
                                             body: article_params[:body])
