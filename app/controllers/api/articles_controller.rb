@@ -22,7 +22,7 @@ class Api::ArticlesController < ApplicationController
     if @article.save
       tag_list = article_params[:tagList]
       if tag_list.present?
-        tags = tag_list.map(&:strip).uniq
+        tags = tag_list.sort.map(&:strip).uniq
         create_or_update_article_tags(@article, tags)
       end
       render json: { article: build_article_response(@article) }, status: :created
@@ -79,7 +79,10 @@ class Api::ArticlesController < ApplicationController
 
   def filter_articles
     articles = Article.all.order(created_at: :desc)
-    articles = articles.where('tags.name = ?', params[:tag]) if params[:tag]
+    if params[:tag]
+      tag = Tag.find_by(name: params[:tag])
+      articles = tag.articles
+    end
     articles = articles.joins(:user).where(users: { username: params[:author] }) if params[:author]
     if params[:favorited]
       articles = articles.joins(:favorites).where(favorites: { user_id: User.find_by(username: params[:favorited]).id })

@@ -4,7 +4,6 @@ class Article < ApplicationRecord
   has_many :tags, through: :article_tags
   default_scope -> { order(created_at: :desc) }
   before_validation :generate_slug, on: :create
-  before_validation :update_slug, on: :update
 
   validates :title, presence: true, length: { maximum: 32 }
   validates :slug, presence: true
@@ -17,11 +16,5 @@ class Article < ApplicationRecord
   def generate_slug
     slug_base = title ? title.parameterize : ''
     self.slug = "#{slug_base}-#{Time.now.to_i}"
-  end
-
-  def update_slug
-    slug_base = title ? title.parameterize : ''
-    slug_time = slug.splut('-').last
-    self.slug = "#{slug_base}-#{slug_time}"
   end
 end
