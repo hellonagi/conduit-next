@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   namespace :api do
     get '/user', to: 'users#show'
-    post '/users', to: 'users#create'
     put '/user', to: 'users#update'
+    post '/users', to: 'users#create'
+    post '/users/login', to: 'authentication#login'
     get '/profiles/:username', to: 'profiles#show'
     post '/profiles/:username/follow', to: 'profiles#follow'
     delete '/profiles/:username/follow', to: 'profiles#unfollow'
@@ -18,6 +19,5 @@ Rails.application.routes.draw do
     post 'articles/:slug/favorite', to: 'articles#favorite'
     delete 'articles/:slug/favorite', to: 'articles#unfavorite'
     get '/tags', to: 'articles#tags'
-    post '/users/login', to: 'authentication#login'
   end
 end
