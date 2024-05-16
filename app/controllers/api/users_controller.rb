@@ -14,7 +14,7 @@ class Api::UsersController < ApplicationController
     if @current_user
       render_user(@current_user, token, :ok)
     else
-      render json: { errors: { body: @current_user.errors } }, status: :unprocessable_entity
+      render json: { errors: 'User not authenticated' }, status: :unprocessable_entity
     end
   end
 
@@ -22,7 +22,8 @@ class Api::UsersController < ApplicationController
     if @current_user.update(user_update_params)
       render_user(@current_user, token, :ok)
     else
-      render json: { errors: { body: @current_user.errors } }, status: :unprocessable_entity
+      render json: { errors: @current_user ? @current_user.errors.full_messages : 'User not authenticated' },
+             status: :unprocessable_entity
     end
   end
 
