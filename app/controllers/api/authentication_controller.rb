@@ -1,6 +1,6 @@
 class Api::AuthenticationController < ApplicationController
   def login
-    @user = User.find_by_email(params[:user][:email])
+    @user = User.find_by(email: params[:user][:email])
     if @user&.authenticate(params[:user][:password])
       token = create_token(@user.id)
       user_response = {
@@ -14,7 +14,7 @@ class Api::AuthenticationController < ApplicationController
       }
       render json: user_response, status: :ok
     else
-      render json: { errors: @user.errors.full_messages }, status: :unauthorized
+      render json: { errors: ['Invalid email or password'] }, status: :unauthorized
     end
   end
 end
