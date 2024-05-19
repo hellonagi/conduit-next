@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Header from './ui/header'
+import Footer from './ui/footer'
 
 export const metadata: Metadata = {
 	title: 'RealWorld Clone',
@@ -22,11 +23,12 @@ export default function RootLayout({
 					rel='stylesheet'
 					type='text/css'
 				/>
-        <link rel="stylesheet" href="//demo.productionready.io/main.css" />
+				<link rel='stylesheet' href='//demo.productionready.io/main.css' />
 			</head>
 			<body>
 				<Header />
 				{children}
+				<Footer />
 			</body>
 		</html>
 	)

@@ -18,13 +18,13 @@ export default function Header() {
 	return (
 		<nav className='navbar navbar-light'>
 			<div className='container'>
-				<a className='navbar-brand' href='/'>
+				<Link className='navbar-brand' href='/'>
 					conduit
-				</a>
+				</Link>
 				<ul className='nav navbar-nav pull-xs-right'>
 					{links.map((link) => {
 						return (
-							<li className='nav-item'>
+							<li className='nav-item' key={link.name}>
 								<Link className={clsx('nav-link', { active: pathname === link.href })} href={link.href}>
 									{link.name}
 								</Link>
