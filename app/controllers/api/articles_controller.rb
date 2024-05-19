@@ -116,7 +116,11 @@ class Api::ArticlesController < ApplicationController
     articles = Article.all.order(created_at: :desc)
     if params[:tag]
       tag = Tag.find_by(name: params[:tag])
-      articles = tag.articles
+      articles = if tag
+                   tag.articles
+                 else
+                   Article.none
+                 end
     end
     articles = articles.joins(:user).where(users: { username: params[:author] }) if params[:author]
     if params[:favorited]

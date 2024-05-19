@@ -1,10 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  let(:user) { create(:user) }
-  let(:other_user) { create(:user) }
-  let(:article) { create(:article, user: user) }
-  let(:other_article) { create(:article, user: other_user) }
+  subject { create(:user) }
 
   describe 'validations' do
     it { should validate_presence_of(:username) }
@@ -48,6 +45,11 @@ RSpec.describe User do
     it { should have_many(:followers_relationships).class_name('Relationship').with_foreign_key('follow_id').dependent(:destroy) }
     it { should have_many(:followers).through(:followers_relationships).source(:user) }
   end
+
+  let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
+  let(:article) { create(:article, user: user) }
+  let(:other_article) { create(:article, user: other_user) }
 
   describe '#feed' do
     it 'returns articles created by the user' do
