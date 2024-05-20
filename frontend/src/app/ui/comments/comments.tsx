@@ -10,7 +10,7 @@ export default async function Comments({ slug }: { slug: string }) {
 		<>
 			{comments &&
 				comments.map((comment: CommentType) => (
-					<div className='card'>
+					<div key={comment.id} className='card'>
 						<div className='card-block'>
 							<p className='card-text'>{comment.body}</p>
 						</div>

@@ -1,29 +1,13 @@
 import Link from 'next/link'
-import { fetchArticles } from '../../lib/data'
 import { formatDate } from '../../lib/date'
 import { ArticleType } from '../../lib/definitions'
 
-export default async function Articles({ articles }: { articles: ArticleType[] }) {
+export default function Articles({ articles }: { articles: ArticleType[] }) {
 	return (
 		<>
-			{/* <div className='feed-toggle'>
-				<ul className='nav nav-pills outline-active'>
-					<li className='nav-item'>
-						<a className='nav-link' href=''>
-							Your Feed
-						</a>
-					</li>
-					<li className='nav-item'>
-						<a className='nav-link active' href=''>
-							Global Feed
-						</a>
-					</li>
-				</ul>
-			</div> */}
-
 			{articles &&
 				articles.map((article: ArticleType) => (
-					<div className='article-preview'>
+					<div key={article.slug} className='article-preview'>
 						<div className='article-meta'>
 							<Link href={`/profile/${article.author.username}`}>
 								<img src='http://i.imgur.com/Qr71crq.jpg' />
@@ -46,7 +30,9 @@ export default async function Articles({ articles }: { articles: ArticleType[] }
 							{article.tagList && (
 								<ul className='tag-list'>
 									{article.tagList.map((tag: string) => (
-										<li className='tag-default tag-pill tag-outline'>{tag}</li>
+										<li key={tag} className='tag-default tag-pill tag-outline'>
+											{tag}
+										</li>
 									))}
 								</ul>
 							)}

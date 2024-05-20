@@ -2,6 +2,7 @@ import { fetchArticle } from '../../lib/data'
 import { ArticleType } from '../../lib/definitions'
 import Form from '../../ui/comments/create-form'
 import Comments from '../../ui/comments/comments'
+import ArticleMeta from '../../ui/articles/meta'
 
 export default async function Page({ params }: { params: { slug: string } }) {
 	const article: ArticleType = await fetchArticle(params.slug)
@@ -12,32 +13,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 				<div className='container'>
 					<h1>{article.title}</h1>
 
-					<div className='article-meta'>
-						<a href='/profile/eric-simons'>
-							<img src='http://i.imgur.com/Qr71crq.jpg' />
-						</a>
-						<div className='info'>
-							<a href='/profile/eric-simons' className='author'>
-								Eric Simons
-							</a>
-							<span className='date'>January 20th</span>
-						</div>
-						<button className='btn btn-sm btn-outline-secondary'>
-							<i className='ion-plus-round'></i>
-							&nbsp; Follow Eric Simons <span className='counter'>(10)</span>
-						</button>
-						&nbsp;&nbsp;
-						<button className='btn btn-sm btn-outline-primary'>
-							<i className='ion-heart'></i>
-							&nbsp; Favorite Post <span className='counter'>(29)</span>
-						</button>
-						<button className='btn btn-sm btn-outline-secondary'>
-							<i className='ion-edit'></i> Edit Article
-						</button>
-						<button className='btn btn-sm btn-outline-danger'>
-							<i className='ion-trash-a'></i> Delete Article
-						</button>
-					</div>
+					<ArticleMeta article={article} />
 				</div>
 			</div>
 
@@ -48,7 +24,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
 						{article.tagList && (
 							<ul className='tag-list'>
 								{article.tagList.map((tag) => (
-									<li className='tag-default tag-pill tag-outline'>{tag}</li>
+									<li key={tag} className='tag-default tag-pill tag-outline'>
+										{tag}
+									</li>
 								))}
 							</ul>
 						)}

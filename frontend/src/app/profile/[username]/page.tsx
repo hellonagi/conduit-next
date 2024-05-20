@@ -1,10 +1,10 @@
 import { fetchArticles, fetchProfile } from '../../lib/data'
 import { ProfileType } from '../../lib/definitions'
-import Articles from '../../ui/articles/list'
+import ArticlesFeed from '../../ui/articles/feed'
 
 export default async function Profile({ params }: { params: { username: string } }) {
 	const profile: ProfileType = await fetchProfile(params.username)
-	const articles = await fetchArticles({ author: profile.username })
+	// const articles = await fetchArticles({ author: profile.username })
 
 	return (
 		<div className='profile-page'>
@@ -31,7 +31,7 @@ export default async function Profile({ params }: { params: { username: string }
 			<div className='container'>
 				<div className='row'>
 					<div className='col-xs-12 col-md-10 offset-md-1'>
-						<Articles articles={articles} />
+						<ArticlesFeed />
 					</div>
 				</div>
 			</div>

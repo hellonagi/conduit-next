@@ -1,10 +1,7 @@
-import Link from 'next/link'
-import { fetchArticles, fetchPopularTags } from './lib/data'
-import Articles from './ui/articles/list'
+import ArticlesFeed from './ui/articles/feed'
+import PopularTags from './ui/tags/popular'
 
-export default async function Home() {
-	const popularTags = await fetchPopularTags()
-	const articles = await fetchArticles()
+export default function Home() {
 	return (
 		<main>
 			<div className='home-page'>
@@ -18,23 +15,9 @@ export default async function Home() {
 				<div className='container page'>
 					<div className='row'>
 						<div className='col-md-9'>
-							<Articles articles={articles} />
+							<ArticlesFeed />
 						</div>
-						{popularTags && (
-							<div className='col-md-3'>
-								<div className='sidebar'>
-									<p>Popular Tags</p>
-
-									<div className='tag-list'>
-										{popularTags.map((tag: string) => (
-											<Link className='tag-pill tag-default' href='#'>
-												{tag}
-											</Link>
-										))}
-									</div>
-								</div>
-							</div>
-						)}
+						<PopularTags />
 					</div>
 				</div>
 			</div>
