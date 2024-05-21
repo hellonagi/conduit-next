@@ -1,11 +1,12 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAuth } from '../hooks/useAuth'
+// import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../contexts/authContext'
 import clsx from 'clsx'
 
 export default function Header() {
-	const user = useAuth()
+	const { user } = useAuth()
 	const pathname = usePathname()
 
 	const links = user

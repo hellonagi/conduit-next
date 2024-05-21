@@ -2,37 +2,40 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '../contexts/authContext'
 
 export default function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [errorMessages, setErrorMessages] = useState<string[]>([])
+	// const [errorMessages, setErrorMessages] = useState<string[]>([])
 	const router = useRouter()
+	const { login, errorMessages } = useAuth()
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
-		try {
-			const response = await fetch('http://localhost:3000/api/users/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ user: { email, password } }),
-			})
+		login(email, password)
+		// try {
+		// 	const response = await fetch('http://localhost:3000/api/users/login', {
+		// 		method: 'POST',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		},
+		// 		body: JSON.stringify({ user: { email, password } }),
+		// 	})
 
-			if (response.ok) {
-				const data = await response.json()
-				localStorage.setItem('token', data.user.token)
-				router.push(`/profile/${data.user.username}`)
-			} else {
-				const data = await response.json()
-				setErrorMessages(data.errors)
-			}
-		} catch (error) {
-			console.error('Failed to sign in:', error)
-			setErrorMessages(['Failed to sign in'])
-		}
+		// 	if (response.ok) {
+		// 		const data = await response.json()
+		// 		localStorage.setItem('token', data.user.token)
+		// 		router.push(`/profile/${data.user.username}`)
+		// 	} else {
+		// 		const data = await response.json()
+		// 		setErrorMessages(data.errors)
+		// 	}
+		// } catch (error) {
+		// 	console.error('Failed to sign in:', error)
+		// 	setErrorMessages(['Failed to sign in'])
+		// }
 	}
 
 	return (

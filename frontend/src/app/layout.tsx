@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Header from './ui/header'
 import Footer from './ui/footer'
+import { AuthProvider } from './contexts/authContext'
 
 export const metadata: Metadata = {
 	title: 'RealWorld Clone',
@@ -26,9 +27,11 @@ export default function RootLayout({
 				<link rel='stylesheet' href='//demo.productionready.io/main.css' />
 			</head>
 			<body>
-				<Header />
-				{children}
-				<Footer />
+				<AuthProvider>
+					<Header />
+					{children}
+					<Footer />
+				</AuthProvider>
 			</body>
 		</html>
 	)

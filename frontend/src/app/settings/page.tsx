@@ -1,12 +1,19 @@
 'use client'
-import { useAuth } from '../hooks/useAuth'
+import React, { useEffect } from 'react'
+import LogoutButton from '../ui/buttons/logout'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '../contexts/authContext'
 
 export default function Settings() {
-	const user = useAuth()
+	const router = useRouter()
+	const { user } = useAuth()
 
-	if (!user) {
-		return null
-	}
+	useEffect(() => {
+		if (!user) {
+			router.push('/login')
+		}
+	}, [user, router])
+	if (!user) return null
 
 	return (
 		<div className='settings-page'>
@@ -44,7 +51,7 @@ export default function Settings() {
 							</fieldset>
 						</form>
 						<hr />
-						<button className='btn btn-outline-danger'>Or click here to logout.</button>
+						<LogoutButton />
 					</div>
 				</div>
 			</div>

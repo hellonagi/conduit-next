@@ -1,14 +1,10 @@
 'use client'
 import React, { useState, useEffect, FormEvent, ChangeEvent, KeyboardEvent } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../contexts/authContext'
 import { useRouter, useParams } from 'next/navigation'
 
 export default function Editor() {
-	const user = useAuth()
-
-	if (!user) {
-		return null
-	}
+	const { user } = useAuth()
 
 	const [title, setTitle] = useState<string>('')
 	const [description, setDescription] = useState<string>('')
@@ -40,6 +36,13 @@ export default function Editor() {
 		}
 	}, [slug])
 
+	useEffect(() => {
+		if (!user) {
+			router.push('/login')
+		}
+	}, [user, router])
+	if (!user) return null
+
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
@@ -51,7 +54,7 @@ export default function Editor() {
 		const url = slug ? `/api/articles/${slug}` : `/api/articles`
 		const method = slug ? 'PATCH' : 'POST'
 
-		const token = localStorage.getItem('token')
+		const token = localStorage.getItem('jwtToken')
 
 		if (!token) {
 			router.push('/login')

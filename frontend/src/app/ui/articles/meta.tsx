@@ -3,10 +3,10 @@ import Link from 'next/link'
 import { fetchArticles } from '../../lib/data'
 import { formatDate } from '../../lib/date'
 import { ArticleType } from '../../lib/definitions'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../contexts/authContext'
 
 export default function ArticleMenu({ article }: { article: ArticleType }) {
-	const user = useAuth()
+	const { user } = useAuth()
 	const isMyArticle = user === article.author
 
 	return (
@@ -46,4 +46,3 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		</div>
 	)
 }
-
