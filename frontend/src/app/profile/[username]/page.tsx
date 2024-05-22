@@ -30,7 +30,7 @@ export default async function Profile({ params }: { params: { username: string }
 			<div className='container'>
 				<div className='row'>
 					<div className='col-xs-12 col-md-10 offset-md-1'>
-						<ArticlesFeed />
+						<ArticlesFeed page='profile' />
 					</div>
 				</div>
 			</div>

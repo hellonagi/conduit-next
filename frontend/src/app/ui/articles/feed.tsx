@@ -4,19 +4,38 @@ import { fetchArticles, fetchFollowingArticles } from '../../lib/data'
 import { useAuth } from '../../contexts/authContext'
 import Articles from './list'
 
-export default function ArticleFeed() {
+type FeedType = 'global' | 'following' | 'my' | 'favorite'
+
+export default function ArticlesFeed({ page = 'index' }: { page: string }) {
+	const active = page === 'index' ? 'global' : 'my'
+
+	let feeds: { name: FeedType; display: string }[] = [
+		{ name: 'global', display: 'Global Feed' },
+		{ name: 'following', display: 'Your Feed' },
+	]
+	if (page === 'profile') {
+		feeds = [
+			{ name: 'my', display: 'My Articles' },
+			{ name: 'favorite', display: 'Favorite Articles' },
+		]
+	}
+
 	const [articles, setArticles] = useState([])
-	const [activeFeed, setActiveFeed] = useState<'your' | 'global'>('global')
-	const { token } = useAuth()
+	const [activeFeed, setActiveFeed] = useState<FeedType>(active)
+	const { user, token } = useAuth()
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				let articles
-				if (activeFeed === 'your') {
+				if (activeFeed === 'following') {
 					if (token) articles = await fetchFollowingArticles(token)
-				} else {
+				} else if (activeFeed === 'global') {
 					articles = await fetchArticles(token)
+				} else if (activeFeed === 'my') {
+					articles = await fetchArticles(token, { author: user?.username })
+				} else if (activeFeed === 'favorite') {
+					articles = await fetchArticles(token, { favorited: user?.username })
 				}
 				setArticles(articles)
 			} catch (error) {
@@ -27,7 +46,7 @@ export default function ArticleFeed() {
 		fetchData()
 	}, [activeFeed, token])
 
-	const handleFeedClick = (feed: 'your' | 'global') => (e: React.MouseEvent<HTMLAnchorElement>) => {
+	const handleFeedClick = (feed: FeedType) => (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault()
 		setActiveFeed(feed)
 	}
@@ -36,24 +55,17 @@ export default function ArticleFeed() {
 		<>
 			<div className='feed-toggle'>
 				<ul className='nav nav-pills outline-active'>
-					<li className='nav-item'>
-						<a
-							className={`nav-link ${activeFeed === 'your' ? 'active' : ''}`}
-							href=''
-							onClick={handleFeedClick('your')}
-						>
-							Your Feed
-						</a>
-					</li>
-					<li className='nav-item'>
-						<a
-							className={`nav-link ${activeFeed === 'global' ? 'active' : ''}`}
-							href=''
-							onClick={handleFeedClick('global')}
-						>
-							Global Feed
-						</a>
-					</li>
+					{feeds.map((feed) => (
+						<li className='nav-item'>
+							<a
+								className={`nav-link ${activeFeed === feed.name ? 'active' : ''}`}
+								href=''
+								onClick={handleFeedClick(feed.name)}
+							>
+								{feed.display}
+							</a>
+						</li>
+					))}
 				</ul>
 			</div>
 			<Articles articles={articles} />

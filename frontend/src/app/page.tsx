@@ -15,7 +15,7 @@ export default function Home() {
 				<div className='container page'>
 					<div className='row'>
 						<div className='col-md-9'>
-							<ArticlesFeed />
+							<ArticlesFeed page='index' />
 						</div>
 						<PopularTags />
 					</div>
