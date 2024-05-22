@@ -35,6 +35,11 @@ class Api::ArticlesController < ApplicationController
     article = @current_user.articles.find_by(slug: params[:slug])
 
     if article.update(article_update_params)
+      tag_list = article_params[:tagList]
+      if tag_list.present?
+        tags = tag_list.sort.map(&:strip).uniq
+        create_or_update_article_tags(article, tags)
+      end
       render json: { article: build_article_response(article, @current_user) }, status: :created
     else
       render json: { errors: article.errors.full_messages }, status: :unprocessable_entity

@@ -14,6 +14,7 @@ RSpec.describe Article, type: :model do
     it { should validate_presence_of(:user_id) }
 
     it 'validates presence of slug' do
+      article.title = ''
       article.slug = ''
       expect(article).not_to be_valid
     end
