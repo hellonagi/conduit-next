@@ -15,6 +15,34 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		router.push(`/editor/${article.slug}`)
 	}
 
+	const handleDelete = async () => {
+		const confirmed = window.confirm('Are you sure you want to delete this article?')
+		if (confirmed) {
+			const token = localStorage.getItem('jwtToken')
+			if (!token) {
+				router.push('/login')
+				return
+			}
+
+			try {
+				const response = await fetch(`http://localhost:3000/api/articles/${article.slug}`, {
+					method: 'DELETE',
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				})
+
+				if (response.ok) {
+					router.push('/')
+				} else {
+					console.error('Failed to delete the article')
+				}
+			} catch (error) {
+				console.error('An error occurred while deleting the article', error)
+			}
+		}
+	}
+
 	return (
 		<div className='article-meta'>
 			<Link href={`/profile/${article.author.username}`}>
@@ -48,7 +76,7 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 					<button className='btn btn-sm btn-outline-secondary' onClick={handleEdit}>
 						<i className='ion-edit'></i> Edit Article
 					</button>
-					<button className='btn btn-sm btn-outline-danger'>
+					<button className='btn btn-sm btn-outline-danger' onClick={handleDelete}>
 						<i className='ion-trash-a'></i> Delete Article
 					</button>
 				</>
