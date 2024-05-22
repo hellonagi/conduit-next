@@ -5,6 +5,10 @@ class ApplicationController < ActionController::API
     JWT.encode(payload, secret_key, 'HS256')
   end
 
+  def get_current_user
+    @current_user ||= User.find(decoded_auth_token[0]['user_id'])
+  end
+
   def authenticate
     if decoded_auth_token
       @current_user ||= User.find(decoded_auth_token[0]['user_id'])

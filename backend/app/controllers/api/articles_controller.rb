@@ -112,7 +112,8 @@ class Api::ArticlesController < ApplicationController
       author: {
         username: article.user.username,
         bio: article.user.bio,
-        image: article.user.image
+        image: article.user.image,
+        following: user&.following?(article.user) || false
       }
     }
   end
