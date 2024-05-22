@@ -16,7 +16,7 @@ export default function ArticleFeed() {
 				if (activeFeed === 'your') {
 					if (token) articles = await fetchFollowingArticles(token)
 				} else {
-					articles = await fetchArticles()
+					articles = await fetchArticles(token)
 				}
 				setArticles(articles)
 			} catch (error) {
@@ -25,7 +25,7 @@ export default function ArticleFeed() {
 		}
 
 		fetchData()
-	}, [activeFeed])
+	}, [activeFeed, token])
 
 	const handleFeedClick = (feed: 'your' | 'global') => (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault()

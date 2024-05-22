@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { fetchArticles } from '../../lib/data'
 import { useRouter } from 'next/navigation'
 import { formatDate } from '../../lib/date'
 import { ArticleType } from '../../lib/definitions'
@@ -12,9 +11,13 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 	const { user, token } = useAuth()
 	const isMyArticle = user?.username === article.author.username
 	const [isFollowing, setIsFollowing] = useState(article.author.following)
+	const [isFavorite, setIsFavorite] = useState(article.favorited)
+	const [favoritesCount, setFavoritesCount] = useState(article.favoritesCount)
 
 	useEffect(() => {
 		setIsFollowing(article.author.following)
+		setIsFavorite(article.favorited)
+		setFavoritesCount(article.favoritesCount)
 	}, [article])
 
 	const handleEdit = () => {
@@ -70,6 +73,34 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		}
 	}
 
+	const handleFavorite = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
+
+		try {
+			const response = await fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
+				method: isFavorite ? 'DELETE' : 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+
+			if (response.ok) {
+				setIsFavorite(!isFavorite)
+				if (isFavorite) {
+					setFavoritesCount((prev) => prev - 1)
+					console.log('Remove favorite the article')
+				} else {
+					setFavoritesCount((prev) => prev + 1)
+					console.log('Add favorite the article')
+				}
+			} else {
+				console.error('Failed to favorite/unfavorite the article')
+			}
+		} catch (error) {
+			console.error('An error occurred while favorite/unfavorite the article', error)
+		}
+	}
+
 	return (
 		<div className='article-meta'>
 			<Link href={`/profile/${article.author.username}`}>
@@ -92,9 +123,9 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 							&nbsp;&nbsp;
 						</>
 					)}
-					<button className='btn btn-sm btn-outline-primary'>
+					<button className='btn btn-sm btn-outline-primary' onClick={handleFavorite}>
 						<i className='ion-heart'></i>
-						&nbsp; Favorite Post <span className='counter'>(29)</span>
+						&nbsp; {isFavorite ? 'Unfavorite' : 'Favorite'} Post <span className='counter'>({favoritesCount})</span>
 					</button>
 				</>
 			)}

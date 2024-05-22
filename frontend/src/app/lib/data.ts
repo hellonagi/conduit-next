@@ -6,10 +6,17 @@ type FetchArticlesParams = {
 	offset?: number
 }
 
-export async function fetchArticles(params: FetchArticlesParams = {}) {
+export async function fetchArticles(token: string | null, params: FetchArticlesParams = {}) {
 	try {
 		const query = new URLSearchParams(params as any).toString()
-		const res = await fetch(`http://localhost:3000/api/articles?${query}`)
+		const headers: HeadersInit = {}
+		if (token) {
+			headers.Authorization = `Bearer ${token}`
+		}
+		const res = await fetch(`http://localhost:3000/api/articles?${query}`, {
+			method: 'GET',
+			headers,
+		})
 		const data = await res.json()
 
 		return data.articles

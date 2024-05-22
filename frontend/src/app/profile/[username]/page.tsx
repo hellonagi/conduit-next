@@ -1,10 +1,9 @@
-import { fetchArticles, fetchProfile } from '../../lib/data'
+import { fetchProfile } from '../../lib/data'
 import { ProfileType } from '../../lib/definitions'
 import ArticlesFeed from '../../ui/articles/feed'
 
 export default async function Profile({ params }: { params: { username: string } }) {
 	const profile: ProfileType = await fetchProfile(params.username)
-	// const articles = await fetchArticles({ author: profile.username })
 
 	return (
 		<div className='profile-page'>
