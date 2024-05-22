@@ -11,7 +11,6 @@ export default function Profile({ params }: { params: { username: string } }) {
 	const [profile, setProfile] = useState<ProfileType>()
 	const { user, token } = useAuth()
 	const isMyProfile = user?.username === params.username
-	// const [isMyProfile, setIsMyProfile] = useState(false)
 	const [isFollowing, setIsFollowing] = useState(false)
 
 	useEffect(() => {
@@ -36,7 +35,7 @@ export default function Profile({ params }: { params: { username: string } }) {
 		e.preventDefault()
 
 		try {
-			const response = await fetch(`http://localhost:3000/api/profiles/${profile.username}/follow`, {
+			const response = await fetch(`http://localhost:3000/api/profiles/${profile?.username}/follow`, {
 				method: isFollowing ? 'DELETE' : 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,
