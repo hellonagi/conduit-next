@@ -44,7 +44,7 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 		}
 
 		fetchData()
-	}, [activeFeed, token])
+	}, [activeFeed, token, user])
 
 	const handleFeedClick = (feed: FeedType) => (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault()
@@ -56,7 +56,7 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 			<div className='feed-toggle'>
 				<ul className='nav nav-pills outline-active'>
 					{feeds.map((feed) => (
-						<li className='nav-item'>
+						<li key={feed.name} className='nav-item'>
 							<a
 								className={`nav-link ${activeFeed === feed.name ? 'active' : ''}`}
 								href=''

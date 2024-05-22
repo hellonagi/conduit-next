@@ -47,7 +47,7 @@ export default function Article({ article }: { article: ArticleType }) {
 		<div key={article.slug} className='article-preview'>
 			<div className='article-meta'>
 				<Link href={`/profile/${article.author.username}`}>
-					<img src='http://i.imgur.com/Qr71crq.jpg' />
+					<img src={article.author.image ? article.author.image : 'https://i.imgur.com/hepj9ZS.png'} />
 				</Link>
 				<div className='info'>
 					<Link className='author' href={`/profile/${article.author.username}`}>

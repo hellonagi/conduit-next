@@ -59,9 +59,16 @@ export async function fetchArticle(slug: string, token: string | null = null) {
 	}
 }
 
-export async function fetchProfile(username: string) {
+export async function fetchProfile(username: string, token: string | null = null) {
 	try {
-		const res = await fetch(`http://localhost:3000/api/profiles/${username}`)
+		const headers: HeadersInit = {}
+		if (token) {
+			headers.Authorization = `Bearer ${token}`
+		}
+		const res = await fetch(`http://localhost:3000/api/profiles/${username}`, {
+			method: 'GET',
+			headers,
+		})
 		const data = await res.json()
 
 		return data.profile

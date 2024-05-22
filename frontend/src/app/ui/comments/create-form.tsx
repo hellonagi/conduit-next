@@ -11,3 +11,5 @@ export default function Form() {
 		</form>
 	)
 }
+
+// user.image ? user.image : 'https://i.imgur.com/hepj9ZS.png'

@@ -26,7 +26,10 @@ export default function Comments({ slug }: { slug: string }) {
 						</div>
 						<div className='card-footer'>
 							<Link className='comment-author' href={`/profile/${comment.author.username}`}>
-								<img className='comment-author-img' src='http://i.imgur.com/Qr71crq.jpg' />
+								<img
+									className='comment-author-img'
+									src={comment.author.image ? comment.author.image : 'https://i.imgur.com/hepj9ZS.png'}
+								/>
 							</Link>
 							&nbsp;
 							<Link className='comment-author' href={`/profile/${comment.author.username}`}>

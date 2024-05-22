@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/authContext'
 import { useRouter, useParams } from 'next/navigation'
 
 export default function ArticleForm() {
-	const { user } = useAuth()
+	const { user, token } = useAuth()
 
 	const [title, setTitle] = useState<string>('')
 	const [description, setDescription] = useState<string>('')
@@ -54,12 +54,12 @@ export default function ArticleForm() {
 		const url = slug ? `/api/articles/${slug}` : `/api/articles`
 		const method = slug ? 'PATCH' : 'POST'
 
-		const token = localStorage.getItem('jwtToken')
+		// const token = localStorage.getItem('jwtToken')
 
-		if (!token) {
-			router.push('/login')
-			return
-		}
+		// if (!token) {
+		// 	router.push('/login')
+		// 	return
+		// }
 
 		try {
 			const response = await fetch(`${baseUrl}${url}`, {

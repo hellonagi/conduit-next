@@ -41,9 +41,9 @@ export type ProfileType = {
 }
 
 export type UserType = {
+	email: string
 	username: string
 	bio: string
 	image: string
 	token: string
-	following: boolean
 }
