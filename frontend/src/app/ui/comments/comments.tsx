@@ -1,10 +1,20 @@
+'use client'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { fetchComments } from '../../lib/data'
 import { CommentType } from '../../lib/definitions'
 import { formatDate } from '../../lib/date'
 
-export default async function Comments({ slug }: { slug: string }) {
-	const comments = await fetchComments(slug)
+export default function Comments({ slug }: { slug: string }) {
+	const [comments, setComments] = useState<CommentType[] | null>(null)
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const comments: CommentType[] = await fetchComments(slug)
+			setComments(comments)
+		}
+		fetchData()
+	}, [slug])
 
 	return (
 		<>

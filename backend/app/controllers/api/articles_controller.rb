@@ -1,5 +1,6 @@
 class Api::ArticlesController < ApplicationController
   before_action :authenticate, only: %i[create update destroy favorite unfavorite feed]
+  before_action :get_current_user, only: %i[index show feed]
 
   def index
     articles = filter_articles

@@ -18,9 +18,32 @@ export async function fetchArticles(params: FetchArticlesParams = {}) {
 	}
 }
 
-export async function fetchArticle(slug: string) {
+export async function fetchFollowingArticles(token: string) {
 	try {
-		const res = await fetch(`http://localhost:3000/api/articles/${slug}`)
+		const res = await fetch(`http://localhost:3000/api/articles/feed`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+		const data = await res.json()
+
+		return data.articles
+	} catch (error) {
+		console.error('Failed to fetch following articles:', error)
+	}
+}
+
+export async function fetchArticle(slug: string, token: string | null = null) {
+	try {
+		const headers: HeadersInit = {}
+		if (token) {
+			headers.Authorization = `Bearer ${token}`
+		}
+		const res = await fetch(`http://localhost:3000/api/articles/${slug}`, {
+			method: 'GET',
+			headers,
+		})
 		const data = await res.json()
 
 		return data.article

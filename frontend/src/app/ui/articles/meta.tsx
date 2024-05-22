@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { fetchArticles } from '../../lib/data'
 import { useRouter } from 'next/navigation'
@@ -8,22 +9,22 @@ import { useAuth } from '../../contexts/authContext'
 
 export default function ArticleMenu({ article }: { article: ArticleType }) {
 	const router = useRouter()
-	const { user } = useAuth()
+	const { user, token } = useAuth()
 	const isMyArticle = user?.username === article.author.username
+	const [isFollowing, setIsFollowing] = useState(article.author.following)
+
+	useEffect(() => {
+		setIsFollowing(article.author.following)
+	}, [article])
 
 	const handleEdit = () => {
 		router.push(`/editor/${article.slug}`)
 	}
 
-	const handleDelete = async () => {
+	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
 		const confirmed = window.confirm('Are you sure you want to delete this article?')
 		if (confirmed) {
-			const token = localStorage.getItem('jwtToken')
-			if (!token) {
-				router.push('/login')
-				return
-			}
-
 			try {
 				const response = await fetch(`http://localhost:3000/api/articles/${article.slug}`, {
 					method: 'DELETE',
@@ -43,6 +44,32 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		}
 	}
 
+	const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
+
+		try {
+			const response = await fetch(`http://localhost:3000/api/profiles/${article.author.username}/follow`, {
+				method: isFollowing ? 'DELETE' : 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+
+			if (response.ok) {
+				setIsFollowing(!isFollowing)
+				if (isFollowing) {
+					console.log('Unfollowed the user')
+				} else {
+					console.log('Followed the user')
+				}
+			} else {
+				console.error('Failed to follow/unfollow the user')
+			}
+		} catch (error) {
+			console.error('An error occurred while following/unfollowing the user', error)
+		}
+	}
+
 	return (
 		<div className='article-meta'>
 			<Link href={`/profile/${article.author.username}`}>
@@ -58,9 +85,9 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 				<>
 					{!isMyArticle && (
 						<>
-							<button className='btn btn-sm btn-outline-secondary'>
+							<button className='btn btn-sm btn-outline-secondary' onClick={handleFollow}>
 								<i className='ion-plus-round'></i>
-								&nbsp; Follow {article.author.username}
+								&nbsp; {isFollowing ? 'Unfollow' : 'Follow'} {article.author.username}
 							</button>
 							&nbsp;&nbsp;
 						</>
