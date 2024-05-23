@@ -5,7 +5,13 @@ import { formatDate } from '../../lib/date'
 import { ArticleType } from '../../lib/definitions'
 import { useAuth } from '../../contexts/authContext'
 
-export default function Article({ article }: { article: ArticleType }) {
+export default function Article({
+	article,
+	onTagClick,
+}: {
+	article: ArticleType
+	onTagClick: (tag: string) => (e: React.MouseEvent<HTMLLIElement>) => void
+}) {
 	const [isFavorite, setIsFavorite] = useState(article.favorited)
 	const [favoritesCount, setFavoritesCount] = useState(article.favoritesCount)
 	const { user, token } = useAuth()
@@ -69,7 +75,7 @@ export default function Article({ article }: { article: ArticleType }) {
 				{article.tagList && (
 					<ul className='tag-list'>
 						{article.tagList.map((tag: string) => (
-							<li key={tag} className='tag-default tag-pill tag-outline'>
+							<li key={tag} className='tag-default tag-pill tag-outline' onClick={onTagClick(tag)}>
 								{tag}
 							</li>
 						))}

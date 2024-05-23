@@ -85,7 +85,7 @@ class Api::ArticlesController < ApplicationController
   end
 
   def tags
-    tags = Tag.all
+    tags = Tag.popular
     render json: { tags: tags.map(&:name) }, status: :ok
   end
 

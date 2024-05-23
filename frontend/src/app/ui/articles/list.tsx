@@ -4,10 +4,19 @@ import { formatDate } from '../../lib/date'
 import { ArticleType } from '../../lib/definitions'
 import Article from './li'
 
-export default function Articles({ articles }: { articles: ArticleType[] }) {
+export default function Articles({
+	articles,
+	onTagClick,
+}: {
+	articles: ArticleType[]
+	onTagClick: (tag: string) => (e: React.MouseEvent<HTMLLIElement>) => void
+}) {
 	return (
 		<>
-			{articles && articles.map((article: ArticleType) => <Article article={article} key={article.slug} />)}
+			{articles &&
+				articles.map((article: ArticleType) => (
+					<Article article={article} key={article.slug} onTagClick={onTagClick} />
+				))}
 
 			{/* <ul className='pagination'>
 								<li className='page-item active'>

@@ -4,7 +4,7 @@ import { fetchArticles, fetchFollowingArticles } from '../../lib/data'
 import { useAuth } from '../../contexts/authContext'
 import Articles from './list'
 
-type FeedType = 'global' | 'following' | 'my' | 'favorite'
+type FeedType = 'global' | 'following' | 'tag' | 'my' | 'favorite'
 
 export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 	const active = page === 'index' ? 'global' : 'my'
@@ -12,6 +12,7 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 	let feeds: { name: FeedType; display: string }[] = [
 		{ name: 'global', display: 'Global Feed' },
 		{ name: 'following', display: 'Your Feed' },
+		{ name: 'tag', display: 'Tag Feed' },
 	]
 	if (page === 'profile') {
 		feeds = [
@@ -22,6 +23,7 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 
 	const [articles, setArticles] = useState([])
 	const [activeFeed, setActiveFeed] = useState<FeedType>(active)
+	const [activeTag, setActiveTag] = useState<string>('')
 	const { user, token } = useAuth()
 
 	useEffect(() => {
@@ -32,6 +34,8 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 					if (token) articles = await fetchFollowingArticles(token)
 				} else if (activeFeed === 'global') {
 					articles = await fetchArticles(token)
+				} else if (activeFeed === 'tag') {
+					articles = await fetchArticles(token, { tag: activeTag })
 				} else if (activeFeed === 'my') {
 					articles = await fetchArticles(token, { author: user?.username })
 				} else if (activeFeed === 'favorite') {
@@ -44,11 +48,17 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 		}
 
 		fetchData()
-	}, [activeFeed, token, user])
+	}, [activeFeed, activeTag, token, user])
 
 	const handleFeedClick = (feed: FeedType) => (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault()
 		setActiveFeed(feed)
+	}
+
+	const handleTagClick = (tag: string) => (e: React.MouseEvent<HTMLLIElement>) => {
+		e.preventDefault()
+		setActiveFeed('tag')
+		setActiveTag(tag)
 	}
 
 	return (
@@ -68,7 +78,7 @@ export default function ArticlesFeed({ page = 'index' }: { page: string }) {
 					))}
 				</ul>
 			</div>
-			<Articles articles={articles} />
+			<Articles articles={articles} onTagClick={handleTagClick} />
 		</>
 	)
 }
