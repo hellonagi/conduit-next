@@ -2,7 +2,7 @@
 
 [RealWorld](https://realworld-docs.netlify.app/docs/specs/backend-specs/introduction) の仕様を満たすウェブアプリ
 
-デプロイ先: 
+デプロイ先: https://conduit-next.vercel.app/
 
 ## 作成したページ
 - Home
