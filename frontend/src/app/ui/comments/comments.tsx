@@ -1,43 +1,36 @@
 'use client'
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { fetchComments } from '../../lib/data'
 import { CommentType } from '../../lib/definitions'
-import { formatDate } from '../../lib/date'
+import Comment from './comment'
+import Form from './create-form'
 
 export default function Comments({ slug }: { slug: string }) {
 	const [comments, setComments] = useState<CommentType[] | null>(null)
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const comments: CommentType[] = await fetchComments(slug)
-			setComments(comments)
-		}
 		fetchData()
 	}, [slug])
 
+	const fetchData = async () => {
+		const comments: CommentType[] = await fetchComments(slug)
+		setComments(comments)
+	}
+
+	const handleDeleteComment = (commentId: number) => {
+		setComments((prevComments) => prevComments?.filter((comment) => comment.id !== commentId) || null)
+	}
+
+	const handlePostComment = () => {
+		fetchData()
+	}
+
 	return (
 		<>
+			<Form slug={slug} onPost={handlePostComment} />
 			{comments &&
 				comments.map((comment: CommentType) => (
-					<div key={comment.id} className='card'>
-						<div className='card-block'>
-							<p className='card-text'>{comment.body}</p>
-						</div>
-						<div className='card-footer'>
-							<Link className='comment-author' href={`/profile/${comment.author.username}`}>
-								<img
-									className='comment-author-img'
-									src={comment.author.image ? comment.author.image : 'https://i.imgur.com/hepj9ZS.png'}
-								/>
-							</Link>
-							&nbsp;
-							<Link className='comment-author' href={`/profile/${comment.author.username}`}>
-								{comment.author.username}
-							</Link>
-							<span className='date-posted'>{formatDate(comment.createdAt)}</span>
-						</div>
-					</div>
+					<Comment key={comment.id} slug={slug} comment={comment} onDelete={handleDeleteComment} />
 				))}
 		</>
 	)

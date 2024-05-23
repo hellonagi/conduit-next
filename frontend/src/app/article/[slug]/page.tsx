@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 import { fetchArticle } from '../../lib/data'
 import { ArticleType } from '../../lib/definitions'
-import Form from '../../ui/comments/create-form'
 import Comments from '../../ui/comments/comments'
 import ArticleMeta from '../../ui/articles/meta'
 import { useAuth } from '../../contexts/authContext'
@@ -56,7 +55,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 
 							<div className='row'>
 								<div className='col-xs-12 col-md-8 offset-md-2'>
-									<Form />
 									<Comments slug={params.slug} />
 								</div>
 							</div>

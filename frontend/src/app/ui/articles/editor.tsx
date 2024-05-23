@@ -54,13 +54,6 @@ export default function ArticleForm() {
 		const url = slug ? `/api/articles/${slug}` : `/api/articles`
 		const method = slug ? 'PATCH' : 'POST'
 
-		// const token = localStorage.getItem('jwtToken')
-
-		// if (!token) {
-		// 	router.push('/login')
-		// 	return
-		// }
-
 		try {
 			const response = await fetch(`${baseUrl}${url}`, {
 				method,

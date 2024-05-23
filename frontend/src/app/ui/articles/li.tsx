@@ -8,7 +8,7 @@ import { useAuth } from '../../contexts/authContext'
 export default function Article({ article }: { article: ArticleType }) {
 	const [isFavorite, setIsFavorite] = useState(article.favorited)
 	const [favoritesCount, setFavoritesCount] = useState(article.favoritesCount)
-	const { token } = useAuth()
+	const { user, token } = useAuth()
 
 	useEffect(() => {
 		setIsFavorite(article.favorited)
@@ -55,10 +55,12 @@ export default function Article({ article }: { article: ArticleType }) {
 					</Link>
 					<span className='date'>{formatDate(article.createdAt)}</span>
 				</div>
-				<button className='btn btn-outline-primary btn-sm pull-xs-right' onClick={handleFavorite}>
-					<i className='ion-heart'></i>
-					&nbsp;{favoritesCount}
-				</button>
+				{user && (
+					<button className='btn btn-outline-primary btn-sm pull-xs-right' onClick={handleFavorite}>
+						<i className='ion-heart'></i>
+						&nbsp;{favoritesCount}
+					</button>
+				)}
 			</div>
 			<Link className='preview-link' href={`/article/${article.slug}`}>
 				<h1>{article.title}</h1>
