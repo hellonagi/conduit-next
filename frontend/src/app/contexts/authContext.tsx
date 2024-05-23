@@ -78,8 +78,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setErrorMessages(data.errors)
 			}
 		} catch (error) {
-			console.error('Failed to sign in:', error)
-			setErrorMessages(['Failed to sign in'])
+			console.error('Failed to sign up:', error)
+			setErrorMessages(['Failed to sign up'])
 		}
 	}
 
