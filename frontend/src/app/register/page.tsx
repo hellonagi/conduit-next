@@ -1,38 +1,19 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useAuth } from '../contexts/authContext'
 
 export default function Register() {
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [errorMessages, setErrorMessages] = useState<string[]>([])
-	const router = useRouter()
+
+	const { register } = useAuth()
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-
-		try {
-			const response = await fetch('http://localhost:3000/api/users', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ user: { username, email, password } }),
-			})
-
-			if (response.ok) {
-				const data = await response.json()
-				router.push(`/login`)
-			} else {
-				const data = await response.json()
-				setErrorMessages(data.errors)
-			}
-		} catch (error) {
-			console.error('Failed to sign up:', error)
-			setErrorMessages(['Failed to sign up'])
-		}
+		register(username, email, password, setErrorMessages)
 	}
 
 	return (

@@ -4,7 +4,8 @@ class Api::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      render_user(@user, nil, :created)
+      token = create_token(@user.id)
+      render_user(@user, token, :created)
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end

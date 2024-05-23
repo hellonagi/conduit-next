@@ -6,9 +6,18 @@ import { UserType } from '../lib/definitions'
 interface AuthContextType {
 	user: UserType | null
 	token: string | null
-	login: (username: string, password: string) => Promise<void>
+	register: (
+		username: string,
+		email: string,
+		password: string,
+		setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
+	) => Promise<void>
+	login: (
+		email: string,
+		password: string,
+		setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
+	) => Promise<void>
 	logout: () => void
-	errorMessages: string[]
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -16,7 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 	const [user, setUser] = useState<UserType | null>(null)
 	const [token, setToken] = useState<string | null>(null)
-	const [errorMessages, setErrorMessages] = useState<string[]>([])
+	// const [errorMessages, setErrorMessages] = useState<string[]>([])
 	const router = useRouter()
 
 	useEffect(() => {
@@ -45,7 +54,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		}
 	}
 
-	const login = async (email: string, password: string) => {
+	const register = async (
+		username: string,
+		email: string,
+		password: string,
+		setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
+	) => {
+		try {
+			const response = await fetch('http://localhost:3000/api/users', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ user: { username, email, password } }),
+			})
+			const data = await response.json()
+			if (response.ok) {
+				setToken(data.user.token)
+				setUser(data.user)
+				localStorage.setItem('jwtToken', data.user.token)
+				router.push(`/profile/${data.user.username}`)
+			} else {
+				setErrorMessages(data.errors)
+			}
+		} catch (error) {
+			console.error('Failed to sign in:', error)
+			setErrorMessages(['Failed to sign in'])
+		}
+	}
+
+	const login = async (
+		email: string,
+		password: string,
+		setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
+	) => {
 		try {
 			const response = await fetch('http://localhost:3000/api/users/login', {
 				method: 'POST',
@@ -76,7 +118,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		router.push('/')
 	}
 
-	return <AuthContext.Provider value={{ user, token, login, logout, errorMessages }}>{children}</AuthContext.Provider>
+	return (
+		<AuthContext.Provider value={{ user, token, register, login, logout }}>
+			{children}
+		</AuthContext.Provider>
+	)
 }
 
 export const useAuth = (): AuthContextType => {
