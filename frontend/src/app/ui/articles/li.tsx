@@ -25,7 +25,7 @@ export default function Article({
 		e.preventDefault()
 
 		try {
-			const response = await fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${article.slug}/favorite`, {
 				method: isFavorite ? 'DELETE' : 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,

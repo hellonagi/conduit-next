@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	const fetchUser = async (jwtToken: string) => {
 		try {
-			const response = await fetch('http://localhost:3000/api/user', {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
 				headers: {
 					Authorization: `Bearer ${jwtToken}`,
 				},
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
 	) => {
 		try {
-			const response = await fetch('http://localhost:3000/api/users', {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
 	) => {
 		try {
-			const response = await fetch('http://localhost:3000/api/users/login', {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -118,11 +118,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 		router.push('/')
 	}
 
-	return (
-		<AuthContext.Provider value={{ user, token, register, login, logout }}>
-			{children}
-		</AuthContext.Provider>
-	)
+	return <AuthContext.Provider value={{ user, token, register, login, logout }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = (): AuthContextType => {

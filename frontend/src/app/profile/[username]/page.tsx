@@ -35,7 +35,7 @@ export default function Profile({ params }: { params: { username: string } }) {
 		e.preventDefault()
 
 		try {
-			const response = await fetch(`http://localhost:3000/api/profiles/${profile?.username}/follow`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/${profile?.username}/follow`, {
 				method: isFollowing ? 'DELETE' : 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,

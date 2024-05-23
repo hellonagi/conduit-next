@@ -29,7 +29,7 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		const confirmed = window.confirm('Are you sure you want to delete this article?')
 		if (confirmed) {
 			try {
-				const response = await fetch(`http://localhost:3000/api/articles/${article.slug}`, {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${article.slug}`, {
 					method: 'DELETE',
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		e.preventDefault()
 
 		try {
-			const response = await fetch(`http://localhost:3000/api/profiles/${article.author.username}/follow`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/${article.author.username}/follow`, {
 				method: isFollowing ? 'DELETE' : 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ export default function ArticleMenu({ article }: { article: ArticleType }) {
 		e.preventDefault()
 
 		try {
-			const response = await fetch(`http://localhost:3000/api/articles/${article.slug}/favorite`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${article.slug}/favorite`, {
 				method: isFavorite ? 'DELETE' : 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,

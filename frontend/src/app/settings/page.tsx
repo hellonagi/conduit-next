@@ -55,7 +55,7 @@ export default function Settings() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		try {
-			const response = await fetch('http://localhost:3000/api/user', {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',

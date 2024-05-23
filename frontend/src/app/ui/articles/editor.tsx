@@ -15,13 +15,12 @@ export default function ArticleForm() {
 	const [errors, setErrors] = useState<string[]>([])
 	const router = useRouter()
 	const { slug } = useParams()
-	const baseUrl = 'http://localhost:3000'
 
 	useEffect(() => {
 		if (slug) {
 			const fetchArticle = async () => {
 				try {
-					const response = await fetch(`${baseUrl}/api/articles/${slug}`)
+					const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`)
 					const data = await response.json()
 					const { title, description, body, tagList } = data.article
 					setTitle(title)
@@ -51,11 +50,11 @@ export default function ArticleForm() {
 			return
 		}
 
-		const url = slug ? `/api/articles/${slug}` : `/api/articles`
+		const url = slug ? `/articles/${slug}` : `/articles`
 		const method = slug ? 'PATCH' : 'POST'
 
 		try {
-			const response = await fetch(`${baseUrl}${url}`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
 				method,
 				headers: {
 					'Content-Type': 'application/json',

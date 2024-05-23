@@ -19,7 +19,7 @@ export default function Comment({ slug, comment, onDelete }: CommentProps) {
 		const confirmed = window.confirm('Are you sure you want to delete this comment?')
 		if (confirmed) {
 			try {
-				const response = await fetch(`http://localhost:3000/api/articles/${slug}/comments/${comment.id}`, {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}/comments/${comment.id}`, {
 					method: 'DELETE',
 					headers: {
 						Authorization: `Bearer ${token}`,

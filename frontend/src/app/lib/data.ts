@@ -13,7 +13,7 @@ export async function fetchArticles(token: string | null, params: FetchArticlesP
 		if (token) {
 			headers.Authorization = `Bearer ${token}`
 		}
-		const res = await fetch(`http://localhost:3000/api/articles?${query}`, {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles?${query}`, {
 			method: 'GET',
 			headers,
 		})
@@ -27,7 +27,7 @@ export async function fetchArticles(token: string | null, params: FetchArticlesP
 
 export async function fetchFollowingArticles(token: string) {
 	try {
-		const res = await fetch(`http://localhost:3000/api/articles/feed`, {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/feed`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export async function fetchArticle(slug: string, token: string | null = null) {
 		if (token) {
 			headers.Authorization = `Bearer ${token}`
 		}
-		const res = await fetch(`http://localhost:3000/api/articles/${slug}`, {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`, {
 			method: 'GET',
 			headers,
 		})
@@ -65,7 +65,7 @@ export async function fetchProfile(username: string, token: string | null = null
 		if (token) {
 			headers.Authorization = `Bearer ${token}`
 		}
-		const res = await fetch(`http://localhost:3000/api/profiles/${username}`, {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/${username}`, {
 			method: 'GET',
 			headers,
 		})
@@ -79,7 +79,7 @@ export async function fetchProfile(username: string, token: string | null = null
 
 export async function fetchComments(slug: string) {
 	try {
-		const res = await fetch(`http://localhost:3000/api/articles/${slug}/comments`)
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}/comments`)
 		const data = await res.json()
 
 		return data.comments
@@ -90,7 +90,7 @@ export async function fetchComments(slug: string) {
 
 export async function fetchPopularTags() {
 	try {
-		const res = await fetch(`http://localhost:3000/api/tags`)
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tags`)
 		const data = await res.json()
 
 		return data.tags

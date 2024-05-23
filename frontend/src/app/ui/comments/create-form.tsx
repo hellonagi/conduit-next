@@ -15,7 +15,7 @@ export default function Form({ slug, onPost }: { slug: string; onPost: () => voi
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		try {
-			const response = await fetch(`http://localhost:3000/api/articles/${slug}/comments`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}/comments`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
